@@ -1,11 +1,51 @@
 <div class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="fw-bold mb-0">Lista zadań</h1>
-    <button title="Dodaj zadanie" class="btn btn-primary">Dodaj zadanie</button>
+    <button title="Dodaj zadanie" class="btn btn-primary">
+      + Dodaj zadanie
+    </button>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <h2>Filtruj zadania według:</h2>
+    <div class="d-flex flex-column flex-md-row gap-3">
+      <div>
+        <h3>nazwy</h3>
+
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Szukaj według nazwy"
+          aria-label="nazwa"
+          [(ngModel)]="filters.name"
+        />
+      </div>
+
+      <div>
+        <h3>daty</h3>
+        <input
+          type="date"
+          aria-label="daty"
+          class="form-control"
+          [(ngModel)]="filters.date"
+        />
+      </div>
+      <h3>lub</h3>
+      <div>
+        <h3>statusu</h3>
+
+        <select class="form-select" [(ngModel)]="filters.status">
+          <option value="">Wszystkie</option>
+          <option value="Completed">Completed</option>
+          <option value="Pending">Pending</option>
+          <option value="Planned">Planned</option>
+        </select>
+      </div>
+    </div>
   </div>
 
   <ul class="list-unstyled">
-    @for (task of tasks; track $index) {
+    @for (task of filteredTasks(); track $index) {
     <li
       class="bg-white rounded-3 shadow-sm p-3 mb-3 position-relative"
       style="border-radius: 1.5rem"
@@ -43,7 +83,7 @@
             >
               {{ task.descVisible ? "ukryj opis" : "pokaż opis" }}
             </button>
-
+            {{ task.date }}
             <span
               class="badge ms-2"
               [ngClass]="{
@@ -59,7 +99,6 @@
             >
               {{ task.status }}
             </span>
-            {{ task.date }}
           </div>
 
           @if (task.descVisible) {
