@@ -1,24 +1,73 @@
-<div class="container">
-  <div class="d-flex my-4">
-    <h1>Lista zadań</h1>
-    <button class="btn btn-primary mx-3">Dodaj zadanie</button>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold mb-0">Lista zadań</h1>
+    <button title="Dodaj zadanie" class="btn btn-primary">Dodaj zadanie</button>
   </div>
-  <ul class="list-group">
-    @for (task of tasks; track $index) {
-      <li class="list-group-item d-block">
-        <div class="item" [ngClass]="{ 'completed': task.status === 'Completed' }">
-          <input type="checkbox" class="form-check-input me-2" [checked]="task.status === 'Completed'"
-                 (change)="toggleCompleted(task)">
 
-          <b class="text-primary">{{ task.name }}</b>
-          <button class="btn btn-link" (click)="toggleDescription()">pokaż opis</button>
-          <br>
-          {{ task.date }} - <span class="badge bg-info">{{ task.status }}</span>
-          @if (descVisible) {
-            <p>{{ task?.description }}</p>
+  <ul class="list-unstyled">
+    @for (task of tasks; track $index) {
+    <li
+      class="bg-white rounded-3 shadow-sm p-3 mb-3 position-relative"
+      style="border-radius: 1.5rem"
+    >
+      <div class="d-flex align-items-center flex-grow-1 gap-3">
+        <input
+          title="zmienić status zadania"
+          type="checkbox"
+          class="form-check-input mt-1"
+          [checked]="task.status === 'Completed'"
+          (change)="toggleCompleted(task)"
+          style="
+            width: 2rem;
+            height: 2rem;
+            cursor: pointer;
+            border-radius: 1rem;
+          "
+        />
+
+        <div>
+          <div class="d-flex flex-wrap gap-3 align-items-center">
+            <b
+              class="fw-semibold"
+              [ngClass]="{
+                'text-decoration-line-through': task.status === 'Completed'
+              }"
+            >
+              {{ task.name }}
+            </b>
+
+            <button
+              title="Opis zadania"
+              class="btn btn-link p-2 small text-primary"
+              (click)="toggleDescription(task)"
+            >
+              {{ task.descVisible ? "ukryj opis" : "pokaż opis" }}
+            </button>
+
+            <span
+              class="badge ms-2"
+              [ngClass]="{
+                'bg-success': task.status === 'Completed',
+                'bg-warning': task.status === 'Pending',
+                'bg-info': task.status === 'Planned'
+              }"
+              style="
+                font-size: 0.75rem;
+                padding: 0.35rem 0.6rem;
+                border-radius: 0.75rem;
+              "
+            >
+              {{ task.status }}
+            </span>
+            {{ task.date }}
+          </div>
+
+          @if (task.descVisible) {
+          <p class="text-muted small mb-0">{{ task.description }}</p>
           }
         </div>
-      </li>
+      </div>
+    </li>
     }
   </ul>
 </div>
