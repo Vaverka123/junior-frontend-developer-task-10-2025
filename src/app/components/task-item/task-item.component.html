@@ -51,8 +51,10 @@
       {{ task.status }}
     </span>
 
-    <p class="text-muted small mb-0" *ngIf="task.descVisible">
+    @if (task.descVisible) {
+    <p class="text-muted small mb-0">
       {{ task.description }}
     </p>
+    }
   </div>
 </div>

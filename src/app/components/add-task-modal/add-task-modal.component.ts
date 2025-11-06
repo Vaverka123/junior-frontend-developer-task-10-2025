@@ -25,9 +25,6 @@ export class AddTaskModalComponent {
     if (form.valid) {
       this.addTask.emit({ ...this.newTask });
       this.newTask = { name: '', date: '', status: 'Planned', description: '' };
-      (document.getElementById('addTaskModal') as any)?.classList.remove(
-        'show'
-      );
     }
   }
 }

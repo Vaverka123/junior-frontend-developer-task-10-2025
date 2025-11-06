@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule, NgClass } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Task } from './models/task.model';
 import { AddTaskModalComponent } from './components/add-task-modal/add-task-modal.component';
@@ -22,13 +22,6 @@ declare var bootstrap: any;
 })
 export class AppComponent {
   title = 'Lista zadań';
-
-  minDate: string;
-
-  constructor() {
-    const today = new Date();
-    this.minDate = today.toISOString().split('T')[0];
-  }
 
   tasks: Task[] = [
     {
@@ -101,18 +94,5 @@ export class AppComponent {
     const modalEl = document.getElementById('addTaskModal');
     const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl!);
     modalInstance.hide();
-
-    modalEl!.addEventListener(
-      'hidden.bs.modal',
-      () => {
-        this.newTask = {
-          name: '',
-          date: '',
-          status: 'Planned',
-          description: '',
-        };
-      },
-      { once: true }
-    );
   }
 }
