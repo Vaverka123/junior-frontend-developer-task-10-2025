@@ -3,13 +3,14 @@ import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 interface Task {
-  id: number;
   name: string;
   date: string;
   status: 'Completed' | 'Pending' | 'Planned';
   description: string;
   descVisible?: boolean;
 }
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-root',
@@ -21,9 +22,15 @@ interface Task {
 export class AppComponent {
   title = 'junior-frontend-developer-task';
 
-  protected tasks: Task[] = [
+  minDate: string;
+
+  constructor() {
+    const today = new Date();
+    this.minDate = today.toISOString().split('T')[0];
+  }
+
+  tasks: Task[] = [
     {
-      id: 1,
       name: 'Zrobić zakupy spożywcze',
       status: 'Completed',
       date: '2025-05-01',
@@ -31,7 +38,6 @@ export class AppComponent {
       descVisible: false,
     },
     {
-      id: 2,
       name: 'Opłacić rachunki',
       status: 'Pending',
       date: '2025-05-10',
@@ -39,7 +45,6 @@ export class AppComponent {
       descVisible: false,
     },
     {
-      id: 3,
       name: 'Urodziny mamy',
       status: 'Planned',
       date: '2025-05-15',
@@ -54,8 +59,15 @@ export class AppComponent {
     status: '',
   };
 
+  newTask: Task = {
+    name: '',
+    date: '',
+    status: 'Pending',
+    description: '',
+  };
+
   toggleCompleted(task: Task) {
-    task.status = task.status === 'Completed' ? 'Planned' : 'Completed';
+    task.status = task.status === 'Completed' ? 'Pending' : 'Completed';
   }
 
   toggleDescription(task: Task) {
@@ -73,5 +85,31 @@ export class AppComponent {
 
       return matchesName && matchesDate && matchesStatus;
     });
+  }
+
+  addTask() {
+    if (!this.newTask.name || !this.newTask.date) return;
+
+    this.tasks.push({
+      ...this.newTask,
+      descVisible: false,
+    });
+
+    const modalEl = document.getElementById('addTaskModal');
+    const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl!);
+    modalInstance.hide();
+
+    modalEl!.addEventListener(
+      'hidden.bs.modal',
+      () => {
+        this.newTask = {
+          name: '',
+          date: '',
+          status: 'Planned',
+          description: '',
+        };
+      },
+      { once: true }
+    );
   }
 }
