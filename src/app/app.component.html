@@ -1,6 +1,6 @@
-<div class="container py-4">
+<div class="container p-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="fw-bold mb-0">Lista zadań</h1>
+    <h1 class="fw-bold mb-0">{{ title }}</h1>
     <button
       title="Dodaj zadanie"
       class="btn btn-primary"
@@ -11,212 +11,16 @@
     </button>
   </div>
 
-  <div class="row g-3 mb-4">
-    <h2>Filtruj zadania według:</h2>
-    <div class="d-flex flex-column flex-md-row gap-3">
-      <div>
-        <h3>nazwy</h3>
+  <task-filters
+    [filters]="filters"
+    (filtersChange)="filters = $event"
+  ></task-filters>
 
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Szukaj według nazwy"
-          aria-label="nazwa"
-          [(ngModel)]="filters.name"
-        />
-      </div>
+  <task-list
+    [tasks]="filteredTasks"
+    (toggleCompleted)="toggleCompleted($event)"
+    (toggleDescription)="toggleDescription($event)"
+  ></task-list>
 
-      <div>
-        <h3>daty</h3>
-        <input
-          type="date"
-          aria-label="daty"
-          class="form-control"
-          [(ngModel)]="filters.date"
-        />
-      </div>
-      <h3>lub</h3>
-      <div>
-        <h3>statusu</h3>
-
-        <select
-          id="taskStatus"
-          class="form-select"
-          [(ngModel)]="filters.status"
-        >
-          <option value="">Wszystkie</option>
-          <option value="Completed">Completed</option>
-          <option value="Pending">Pending</option>
-          <option value="Planned">Planned</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <ul class="list-unstyled">
-    @for (task of filteredTasks(); track $index) {
-    <li
-      class="bg-white rounded-3 shadow-sm p-3 mb-3 position-relative"
-      style="border-radius: 1.5rem"
-    >
-      <div class="d-flex align-items-center flex-grow-1 gap-3">
-        <input
-          name="zmienić status zadania {{ task.name }}"
-          title="zmienić status zadania"
-          type="checkbox"
-          class="form-check-input mt-1"
-          [checked]="task.status === 'Completed'"
-          (change)="toggleCompleted(task)"
-          style="
-            width: 2rem;
-            height: 2rem;
-            cursor: pointer;
-            border-radius: 1rem;
-          "
-        />
-
-        <div>
-          <div class="d-flex flex-wrap gap-3 align-items-center">
-            <b
-              class="fw-semibold"
-              [ngClass]="{
-                'text-decoration-line-through': task.status === 'Completed'
-              }"
-            >
-              {{ task.name }}
-            </b>
-
-            <button
-              title="Opis zadania"
-              class="btn btn-link p-2 small text-primary"
-              (click)="toggleDescription(task)"
-            >
-              @if (task.description) {
-
-              {{ task.descVisible ? "ukryj opis" : "pokaż opis" }}
-              }
-            </button>
-            {{ task.date }}
-            <span
-              class="badge ms-2"
-              [ngClass]="{
-                'bg-success': task.status === 'Completed',
-                'bg-warning': task.status === 'Pending',
-                'bg-info': task.status === 'Planned'
-              }"
-              style="
-                font-size: 0.75rem;
-                padding: 0.35rem 0.6rem;
-                border-radius: 0.75rem;
-              "
-            >
-              {{ task.status }}
-            </span>
-          </div>
-
-          @if (task.descVisible) {
-          <p class="text-muted small mb-0">{{ task.description }}</p>
-          }
-        </div>
-      </div>
-    </li>
-    }
-  </ul>
-
-  <div
-    class="modal fade"
-    id="addTaskModal"
-    tabindex="-1"
-    aria-labelledby="addTaskModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-3 shadow">
-        <div class="modal-header">
-          <h4 class="modal-title fw-bold" id="addTaskModalLabel">
-            Dodaj nowe zadanie
-          </h4>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-
-        <div class="modal-body">
-          <form (ngSubmit)="addTask()" #taskForm="ngForm">
-            <div class="mb-3">
-              <label for="taskName" class="form-label">Nazwa zadania</label>
-              <input
-                type="text"
-                id="taskName"
-                class="form-control"
-                required
-                [(ngModel)]="newTask.name"
-                name="name"
-                placeholder="Wpisz nazwę zadania"
-              />
-            </div>
-
-            <div class="mb-3">
-              <label for="taskDate" class="form-label">Data</label>
-              <input
-                type="date"
-                id="taskDate"
-                class="form-control"
-                required
-                [(ngModel)]="newTask.date"
-                name="date"
-                [attr.min]="minDate"
-              />
-            </div>
-
-            <div class="mb-3">
-              <label for="taskStatus" class="form-label">Status</label>
-              <select
-                id="taskStatus"
-                class="form-select"
-                required
-                [(ngModel)]="newTask.status"
-                name="status"
-              >
-                <option value="Planned">Planned</option>
-                <option value="Pending">Pending</option>
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label for="taskDescription" class="form-label">Opis</label>
-              <textarea
-                id="taskDescription"
-                class="form-control"
-                rows="3"
-                [(ngModel)]="newTask.description"
-                name="description"
-                placeholder="Dodaj opis zadania (opcjonalnie)"
-              ></textarea>
-            </div>
-
-            <div class="text-end">
-              <button
-                type="button"
-                class="btn btn-secondary me-2"
-                data-bs-dismiss="modal"
-              >
-                Anuluj
-              </button>
-              <button
-                type="submit"
-                class="btn btn-primary"
-                [disabled]="!taskForm.form.valid"
-              >
-                Dodaj
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <add-task-modal (addTask)="addTask($event)"></add-task-modal>
 </div>

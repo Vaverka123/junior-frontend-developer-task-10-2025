@@ -1,26 +1,27 @@
 import { Component } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Task {
-  name: string;
-  date: string;
-  status: 'Completed' | 'Pending' | 'Planned';
-  description: string;
-  descVisible?: boolean;
-}
+import { Task } from './models/task.model';
+import { AddTaskModalComponent } from './components/add-task-modal/add-task-modal.component';
+import { TaskListComponent } from './components/task-list/task-list.component';
+import { TaskFiltersComponent } from './components/task-filters/task-filters.component';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-root',
-  imports: [NgClass, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TaskFiltersComponent,
+    TaskListComponent,
+    AddTaskModalComponent,
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
   standalone: true,
 })
 export class AppComponent {
-  title = 'junior-frontend-developer-task';
+  title = 'Lista zadań';
 
   minDate: string;
 
@@ -74,24 +75,26 @@ export class AppComponent {
     task.descVisible = !task.descVisible;
   }
 
-  filteredTasks(): Task[] {
+  get filteredTasks(): Task[] {
     return this.tasks.filter((task) => {
-      const matchesName = task.name
-        .toLowerCase()
-        .includes(this.filters.name.toLowerCase());
-      const matchesDate = !this.filters.date || task.date === this.filters.date;
-      const matchesStatus =
-        !this.filters.status || task.status === this.filters.status;
-
+      const matchesName = this.filters.name
+        ? task.name.toLowerCase().includes(this.filters.name.toLowerCase())
+        : true;
+      const matchesDate = this.filters.date
+        ? task.date === this.filters.date
+        : true;
+      const matchesStatus = this.filters.status
+        ? task.status === this.filters.status
+        : true;
       return matchesName && matchesDate && matchesStatus;
     });
   }
 
-  addTask() {
-    if (!this.newTask.name || !this.newTask.date) return;
+  addTask(task: Task) {
+    if (!task.name || !task.date) return;
 
     this.tasks.push({
-      ...this.newTask,
+      ...task,
       descVisible: false,
     });
 

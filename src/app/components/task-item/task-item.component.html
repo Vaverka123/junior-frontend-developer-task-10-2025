@@ -1,0 +1,56 @@
+<li
+  class="bg-white rounded-3 shadow-sm p-3 mb-3 position-relative"
+  style="border-radius: 1.5rem"
+>
+  <div
+    class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 align-items-center justify-content-between"
+  >
+    <input
+      name="checkOut"
+      type="checkbox"
+      class="form-check-input mt-1"
+      [checked]="task.status === 'Completed'"
+      (change)="toggleCompleted.emit(task)"
+      style="width: 2rem; height: 2rem; cursor: pointer; border-radius: 1rem"
+    />
+
+    <b
+      class="fw-semibold"
+      [ngClass]="{
+        'text-decoration-line-through': task.status === 'Completed'
+      }"
+    >
+      {{ task.name }}
+    </b>
+
+    <button
+      class="btn btn-link p-2 small text-primary"
+      (click)="toggleDescription.emit(task)"
+      *ngIf="task.description"
+    >
+      {{ task.descVisible ? "ukryj opis" : "pokaż opis" }}
+    </button>
+
+    {{ task.date }}
+
+    <span
+      class="badge ms-2"
+      [ngClass]="{
+        'bg-success': task.status === 'Completed',
+        'bg-warning': task.status === 'Pending',
+        'bg-info': task.status === 'Planned'
+      }"
+      style="
+        font-size: 0.75rem;
+        padding: 0.35rem 0.6rem;
+        border-radius: 0.75rem;
+      "
+    >
+      {{ task.status }}
+    </span>
+
+    <p class="text-muted small mb-0" *ngIf="task.descVisible">
+      {{ task.description }}
+    </p>
+  </div>
+</li>
