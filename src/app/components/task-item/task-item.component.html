@@ -1,4 +1,4 @@
-<li
+<div
   class="bg-white rounded-3 shadow-sm p-3 mb-3 position-relative"
   style="border-radius: 1.5rem"
 >
@@ -12,6 +12,7 @@
       [checked]="task.status === 'Completed'"
       (change)="toggleCompleted.emit(task)"
       style="width: 2rem; height: 2rem; cursor: pointer; border-radius: 1rem"
+      aria-label="Zmień status zadania"
     />
 
     <b
@@ -44,6 +45,7 @@
         font-size: 0.75rem;
         padding: 0.35rem 0.6rem;
         border-radius: 0.75rem;
+        border: solid 2px black;
       "
     >
       {{ task.status }}
@@ -53,4 +55,4 @@
       {{ task.description }}
     </p>
   </div>
-</li>
+</div>

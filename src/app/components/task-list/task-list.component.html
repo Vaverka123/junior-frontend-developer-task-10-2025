@@ -1,4 +1,4 @@
-<ul class="list-unstyled">
+<div class="list-unstyled">
   @for (task of tasks; track task.name) {
   <task-item
     [task]="task"
@@ -6,4 +6,4 @@
     (toggleDescription)="toggleDescription.emit($event)"
   ></task-item>
   }
-</ul>
+</div>
