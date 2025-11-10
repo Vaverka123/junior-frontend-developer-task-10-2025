@@ -31,6 +31,17 @@
     >
       {{ task.descVisible ? "ukryj opis" : "pokaż opis" }}
     </button>
+    @if(!task.description){
+    <span>
+      <button
+        class="btn btn-link p-2 small text-primary"
+        (click)="toggleDescription.emit(task)"
+        *ngIf="task.description"
+      >
+        {{ "brak opisu" }}
+      </button></span
+    >
+    }
 
     {{ task.date }}
 
