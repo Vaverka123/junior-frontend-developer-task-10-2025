@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Task } from './models/task.model';
 import { AddTaskModalComponent } from './components/add-task-modal/add-task-modal.component';
-import { TaskListComponent } from './components/task-list/task-list.component';
 import { TaskFiltersComponent } from './components/task-filters/task-filters.component';
+import { TaskGroupComponent } from './components/task-group/task-group.component';
+import { RemoveTaskModalComponent } from './components/remove-task-modal/remove-task-modal.component';
 
 declare var bootstrap: any;
 
@@ -14,8 +15,9 @@ declare var bootstrap: any;
     CommonModule,
     FormsModule,
     TaskFiltersComponent,
-    TaskListComponent,
+    TaskGroupComponent,
     AddTaskModalComponent,
+    RemoveTaskModalComponent,
   ],
   templateUrl: './app.component.html',
   standalone: true,
@@ -47,6 +49,29 @@ export class AppComponent {
     },
   ];
 
+  selectedTaskToRemove?: Task;
+
+  openRemoveModal(task: Task): void {
+    this.selectedTaskToRemove = task;
+    const modalEl = document.getElementById('removeTaskModal');
+    if (modalEl) {
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+  }
+
+  removeTask(task: Task): void {
+    this.tasks = this.tasks.filter((t) => t !== task);
+
+    const modalEl = document.getElementById('removeTaskModal');
+    if (modalEl) {
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (modal) {
+        modal.hide();
+      }
+    }
+  }
+
   filters = {
     name: '',
     date: '',
@@ -69,18 +94,24 @@ export class AppComponent {
   }
 
   get filteredTasks(): Task[] {
-    return this.tasks.filter((task) => {
-      const matchesName = this.filters.name
-        ? task.name.toLowerCase().includes(this.filters.name.toLowerCase())
-        : true;
-      const matchesDate = this.filters.date
-        ? task.date === this.filters.date
-        : true;
-      const matchesStatus = this.filters.status
-        ? task.status === this.filters.status
-        : true;
-      return matchesName && matchesDate && matchesStatus;
-    });
+    return this.tasks
+      .filter((task) => {
+        const matchesName = this.filters.name
+          ? task.name.toLowerCase().includes(this.filters.name.toLowerCase())
+          : true;
+        const matchesDate = this.filters.date
+          ? task.date === this.filters.date
+          : true;
+        const matchesStatus = this.filters.status
+          ? task.status === this.filters.status
+          : true;
+        return matchesName && matchesDate && matchesStatus;
+      })
+      .sort((a, b) => {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return dateA - dateB;
+      });
   }
 
   addTask(task: Task) {

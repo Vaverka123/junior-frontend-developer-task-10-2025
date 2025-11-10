@@ -2,8 +2,98 @@
   class="bg-white rounded-3 shadow-sm p-3 mb-3 position-relative"
   style="border-radius: 1.5rem"
 >
+  <div class="d-block d-md-none">
+    <div class="d-flex justify-content-between align-items-start mb-2">
+      <div class="d-flex align-items-center gap-2 flex-grow-1">
+        <input
+          name="checkOut"
+          type="checkbox"
+          class="form-check-input"
+          [checked]="task.status === 'Completed'"
+          (change)="toggleCompleted.emit(task)"
+          style="
+            width: 1.5rem;
+            height: 1.5rem;
+            cursor: pointer;
+            border-radius: 0.75rem;
+            flex-shrink: 0;
+          "
+          aria-label="Zmień status zadania"
+        />
+        <b
+          class="fw-semibold"
+          [ngClass]="{
+            'text-decoration-line-through': task.status === 'Completed'
+          }"
+          style="word-break: break-word; line-height: 1.2"
+        >
+          {{ task.name }}
+        </b>
+      </div>
+      <button
+        class="btn btn-danger btn-sm ms-2"
+        style="
+          padding: 0.25rem;
+          border-radius: 50%;
+          width: 1.75rem;
+          height: 1.75rem;
+          font-size: 0.8rem;
+          flex-shrink: 0;
+        "
+        (click)="onRemove()"
+      >
+        ×
+      </button>
+    </div>
+
+    <div
+      class="d-flex justify-content-between align-items-center flex-wrap gap-2"
+    >
+      <div class="d-flex align-items-center gap-2">
+        <small class="text-muted">{{ task.date }}</small>
+        <span
+          class="badge"
+          [ngClass]="{
+            'bg-success': task.status === 'Completed',
+            'bg-warning text-dark': task.status === 'Pending',
+            'bg-info': task.status === 'Planned'
+          }"
+          style="
+            font-size: 0.65rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+          "
+        >
+          {{ task.status }}
+        </span>
+      </div>
+      <button
+        class="btn btn-link p-1 small text-primary"
+        (click)="toggleDescription.emit(task)"
+        *ngIf="task.description"
+        style="font-size: 0.75rem"
+      >
+        {{ task.descVisible ? "ukryj opis" : "pokaż opis" }}
+      </button>
+      <span
+        *ngIf="!task.description"
+        class="small text-muted"
+        style="font-size: 0.75rem"
+      >
+        brak opisu
+      </span>
+    </div>
+
+    @if (task.descVisible && task.description) {
+    <div class="mt-2 pt-2 border-top">
+      <p class="text-muted small mb-0">{{ task.description }}</p>
+    </div>
+    }
+  </div>
+
   <div
-    class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 align-items-center justify-content-between"
+    class="task d-none d-md-grid gap-2 align-items-center justify-items-center"
+    style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr"
   >
     <input
       name="checkOut"
@@ -16,7 +106,7 @@
     />
 
     <b
-      class="fw-semibold"
+      class="fw-semibold position-relative"
       [ngClass]="{
         'text-decoration-line-through': task.status === 'Completed'
       }"
@@ -32,15 +122,7 @@
       {{ task.descVisible ? "ukryj opis" : "pokaż opis" }}
     </button>
     @if(!task.description){
-    <span>
-      <button
-        class="btn btn-link p-2 small text-primary"
-        (click)="toggleDescription.emit(task)"
-        *ngIf="task.description"
-      >
-        {{ "brak opisu" }}
-      </button></span
-    >
+    <span class="small text-muted"></span>
     }
 
     {{ task.date }}
@@ -62,8 +144,27 @@
       {{ task.status }}
     </span>
 
+    <button
+      class="btn btn-danger"
+      style="padding: 0; border-radius: 50%; width: 2rem; height: 2rem"
+      (click)="onRemove()"
+    >
+      X
+    </button>
     @if (task.descVisible) {
-    <p class="text-muted small mb-0">
+    <p
+      class="text-muted small position-absolute"
+      style="
+        top: 100%;
+        left: 50px;
+        z-index: 10;
+        background: white;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        max-width: 300px;
+      "
+    >
       {{ task.description }}
     </p>
     }

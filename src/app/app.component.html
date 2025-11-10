@@ -16,11 +16,16 @@
     (filtersChange)="filters = $event"
   ></task-filters>
 
-  <task-list
+  <task-group
     [tasks]="filteredTasks"
     (toggleCompleted)="toggleCompleted($event)"
     (toggleDescription)="toggleDescription($event)"
-  ></task-list>
+    (removeTask)="openRemoveModal($event)"
+  ></task-group>
 
   <add-task-modal (addTask)="addTask($event)"></add-task-modal>
+  <remove-task-modal
+    [taskToRemove]="selectedTaskToRemove"
+    (confirmRemove)="removeTask($event)"
+  ></remove-task-modal>
 </div>

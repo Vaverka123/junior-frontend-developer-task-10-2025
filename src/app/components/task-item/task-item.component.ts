@@ -12,4 +12,9 @@ export class TaskItemComponent {
   @Input() task!: Task;
   @Output() toggleCompleted = new EventEmitter<Task>();
   @Output() toggleDescription = new EventEmitter<Task>();
+  @Output() removeTask = new EventEmitter<Task>();
+
+  onRemove(): void {
+    this.removeTask.emit(this.task);
+  }
 }

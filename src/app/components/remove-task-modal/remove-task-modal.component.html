@@ -1,0 +1,35 @@
+<div
+  class="modal fade"
+  id="removeTaskModal"
+  tabindex="-1"
+  aria-labelledby="removeTaskModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="removeTaskModalLabel">Usuń zadanie</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Czy na pewno chcesz usunąć to zadanie?</p>
+        <div class="border rounded p-2 bg-light">
+          <strong>{{ taskToRemove?.name }}</strong>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Anuluj
+        </button>
+        <button type="button" class="btn btn-danger" (click)="onConfirm()">
+          Usuń
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

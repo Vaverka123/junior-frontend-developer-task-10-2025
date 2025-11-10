@@ -1,0 +1,13 @@
+<div *ngFor="let groupName of getGroupNames(groupedTasks)" class="mb-4">
+  <h4 class="fw-semibold border-bottom pb-2 mt-3 text-primary">
+    <i class="bi bi-calendar-event me-2"></i>
+    {{ groupName }}
+  </h4>
+
+  <task-list
+    [tasks]="groupedTasks[groupName]"
+    (toggleCompleted)="toggleCompleted.emit($event)"
+    (toggleDescription)="toggleDescription.emit($event)"
+    (removeTask)="removeTask.emit($event)"
+  ></task-list>
+</div>
