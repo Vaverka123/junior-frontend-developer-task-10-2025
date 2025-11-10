@@ -16,11 +16,17 @@
     (filtersChange)="filters = $event"
   ></task-filters>
 
-  <task-list
-    [tasks]="filteredTasks"
-    (toggleCompleted)="toggleCompleted($event)"
-    (toggleDescription)="toggleDescription($event)"
-  ></task-list>
+  <div *ngFor="let groupName of getGroupNames(groupedTasks)" class="mb-4">
+    <h4 class="fw-semibold text-primary mt-4">
+      <i class="bi bi-calendar-event me-2"></i>{{ groupName }}
+    </h4>
+
+    <task-list
+      [tasks]="groupedTasks[groupName]"
+      (toggleCompleted)="toggleCompleted($event)"
+      (toggleDescription)="toggleDescription($event)"
+    ></task-list>
+  </div>
 
   <add-task-modal (addTask)="addTask($event)"></add-task-modal>
 </div>
