@@ -16,13 +16,18 @@
     />
 
     <b
-      class="fw-semibold"
+      class="fw-semibold position-relative"
       [ngClass]="{
         'text-decoration-line-through': task.status === 'Completed'
       }"
     >
       {{ task.name }}
     </b>
+    @if (task.descVisible) {
+    <p class="text-muted small mb-0 absolute-top mt-5">
+      {{ task.description }}
+    </p>
+    }
 
     <button
       class="btn btn-link p-2 small text-primary"
@@ -61,11 +66,5 @@
     >
       {{ task.status }}
     </span>
-
-    @if (task.descVisible) {
-    <p class="text-muted small mb-0">
-      {{ task.description }}
-    </p>
-    }
   </div>
 </div>

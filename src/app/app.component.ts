@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Task } from './models/task.model';
 import { AddTaskModalComponent } from './components/add-task-modal/add-task-modal.component';
-import { TaskListComponent } from './components/task-list/task-list.component';
 import { TaskFiltersComponent } from './components/task-filters/task-filters.component';
+import { TaskGroupComponent } from './components/task-group/task-group.component';
 
 declare var bootstrap: any;
 
@@ -14,7 +14,8 @@ declare var bootstrap: any;
     CommonModule,
     FormsModule,
     TaskFiltersComponent,
-    TaskListComponent,
+
+    TaskGroupComponent,
     AddTaskModalComponent,
   ],
   templateUrl: './app.component.html',
@@ -87,67 +88,6 @@ export class AppComponent {
         const dateB = new Date(b.date).getTime();
         return dateA - dateB;
       });
-  }
-
-  get groupedTasks(): { [key: string]: Task[] } {
-    const today = new Date();
-    const startOfToday = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate()
-    );
-    const endOfToday = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() + 1
-    );
-    const startOfWeek = new Date(startOfToday);
-    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + 1);
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(endOfWeek.getDate() + 6);
-
-    const groups: { [key: string]: Task[] } = {
-      Przeszłe: [],
-      Dzisiaj: [],
-      Jutro: [],
-      'W tym tygodniu': [],
-      Przyszłe: [],
-    };
-
-    this.filteredTasks.forEach((task) => {
-      const date = new Date(task.date);
-      const taskDate = new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate()
-      );
-
-      if (taskDate < startOfToday) {
-        groups['Przeszłe'].push(task);
-      } else if (taskDate >= startOfToday && taskDate < endOfToday) {
-        groups['Dzisiaj'].push(task);
-      } else if (
-        taskDate >= endOfToday &&
-        taskDate <
-          new Date(
-            endOfToday.getFullYear(),
-            endOfToday.getMonth(),
-            endOfToday.getDate() + 1
-          )
-      ) {
-        groups['Jutro'].push(task);
-      } else if (taskDate >= startOfWeek && taskDate <= endOfWeek) {
-        groups['W tym tygodniu'].push(task);
-      } else {
-        groups['Przyszłe'].push(task);
-      }
-    });
-
-    return groups;
-  }
-
-  getGroupNames(groups: { [key: string]: Task[] }): string[] {
-    return Object.keys(groups).filter((key) => groups[key].length > 0);
   }
 
   addTask(task: Task) {
