@@ -69,18 +69,24 @@ export class AppComponent {
   }
 
   get filteredTasks(): Task[] {
-    return this.tasks.filter((task) => {
-      const matchesName = this.filters.name
-        ? task.name.toLowerCase().includes(this.filters.name.toLowerCase())
-        : true;
-      const matchesDate = this.filters.date
-        ? task.date === this.filters.date
-        : true;
-      const matchesStatus = this.filters.status
-        ? task.status === this.filters.status
-        : true;
-      return matchesName && matchesDate && matchesStatus;
-    });
+    return this.tasks
+      .filter((task) => {
+        const matchesName = this.filters.name
+          ? task.name.toLowerCase().includes(this.filters.name.toLowerCase())
+          : true;
+        const matchesDate = this.filters.date
+          ? task.date === this.filters.date
+          : true;
+        const matchesStatus = this.filters.status
+          ? task.status === this.filters.status
+          : true;
+        return matchesName && matchesDate && matchesStatus;
+      })
+      .sort((a, b) => {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return dateA - dateB;
+      });
   }
 
   addTask(task: Task) {
