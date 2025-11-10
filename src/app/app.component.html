@@ -20,7 +20,12 @@
     [tasks]="filteredTasks"
     (toggleCompleted)="toggleCompleted($event)"
     (toggleDescription)="toggleDescription($event)"
+    (removeTask)="openRemoveModal($event)"
   ></task-group>
 
   <add-task-modal (addTask)="addTask($event)"></add-task-modal>
+  <remove-task-modal
+    [taskToRemove]="selectedTaskToRemove"
+    (confirmRemove)="removeTask($event)"
+  ></remove-task-modal>
 </div>

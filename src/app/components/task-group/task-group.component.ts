@@ -13,6 +13,7 @@ export class TaskGroupComponent {
   @Input() tasks: Task[] = [];
   @Output() toggleCompleted = new EventEmitter<Task>();
   @Output() toggleDescription = new EventEmitter<Task>();
+  @Output() removeTask = new EventEmitter<Task>();
 
   get groupedTasks(): { [key: string]: Task[] } {
     const today = new Date();

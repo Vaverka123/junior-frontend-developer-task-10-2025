@@ -5,6 +5,7 @@ import { Task } from './models/task.model';
 import { AddTaskModalComponent } from './components/add-task-modal/add-task-modal.component';
 import { TaskFiltersComponent } from './components/task-filters/task-filters.component';
 import { TaskGroupComponent } from './components/task-group/task-group.component';
+import { RemoveTaskModalComponent } from './components/remove-task-modal/remove-task-modal.component';
 
 declare var bootstrap: any;
 
@@ -14,9 +15,9 @@ declare var bootstrap: any;
     CommonModule,
     FormsModule,
     TaskFiltersComponent,
-
     TaskGroupComponent,
     AddTaskModalComponent,
+    RemoveTaskModalComponent,
   ],
   templateUrl: './app.component.html',
   standalone: true,
@@ -47,6 +48,29 @@ export class AppComponent {
       descVisible: false,
     },
   ];
+
+  selectedTaskToRemove?: Task;
+
+  openRemoveModal(task: Task): void {
+    this.selectedTaskToRemove = task;
+    const modalEl = document.getElementById('removeTaskModal');
+    if (modalEl) {
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+  }
+
+  removeTask(task: Task): void {
+    this.tasks = this.tasks.filter((t) => t !== task);
+
+    const modalEl = document.getElementById('removeTaskModal');
+    if (modalEl) {
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (modal) {
+        modal.hide();
+      }
+    }
+  }
 
   filters = {
     name: '',
