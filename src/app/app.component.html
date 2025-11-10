@@ -1,24 +1,26 @@
-<div class="container">
-  <div class="d-flex my-4">
-    <h1>Lista zadań</h1>
-    <button class="btn btn-primary mx-3">Dodaj zadanie</button>
+<div class="container p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold mb-0">{{ title }}</h1>
+    <button
+      title="Dodaj zadanie"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#addTaskModal"
+    >
+      + Dodaj zadanie
+    </button>
   </div>
-  <ul class="list-group">
-    @for (task of tasks; track $index) {
-      <li class="list-group-item d-block">
-        <div class="item" [ngClass]="{ 'completed': task.status === 'Completed' }">
-          <input type="checkbox" class="form-check-input me-2" [checked]="task.status === 'Completed'"
-                 (change)="toggleCompleted(task)">
 
-          <b class="text-primary">{{ task.name }}</b>
-          <button class="btn btn-link" (click)="toggleDescription()">pokaż opis</button>
-          <br>
-          {{ task.date }} - <span class="badge bg-info">{{ task.status }}</span>
-          @if (descVisible) {
-            <p>{{ task?.description }}</p>
-          }
-        </div>
-      </li>
-    }
-  </ul>
+  <task-filters
+    [filters]="filters"
+    (filtersChange)="filters = $event"
+  ></task-filters>
+
+  <task-list
+    [tasks]="filteredTasks"
+    (toggleCompleted)="toggleCompleted($event)"
+    (toggleDescription)="toggleDescription($event)"
+  ></task-list>
+
+  <add-task-modal (addTask)="addTask($event)"></add-task-modal>
 </div>

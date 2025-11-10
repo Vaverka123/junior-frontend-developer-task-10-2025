@@ -1,0 +1,48 @@
+<div class="row g-3 mb-4">
+  <h2>Filtruj zadania według:</h2>
+
+  <div class="d-flex flex-column flex-md-row gap-3">
+    <div>
+      <h3>Nazwy</h3>
+      <input
+        id="nameFilter"
+        type="text"
+        class="form-control"
+        placeholder="Szukaj według nazwy"
+        [(ngModel)]="filters.name"
+        (ngModelChange)="update()"
+        aria-label="Name filter"
+      />
+    </div>
+
+    <div>
+      <h3>Daty</h3>
+      <input
+        id="dateFilter"
+        type="date"
+        class="form-control"
+        [(ngModel)]="filters.date"
+        (ngModelChange)="update()"
+        aria-label="Data filter"
+      />
+    </div>
+
+    <span class="fw-bold fs-4">lub</span>
+
+    <div>
+      <h3>Statusu</h3>
+      <select
+        id="statusFilter"
+        class="form-select"
+        [(ngModel)]="filters.status"
+        (ngModelChange)="update()"
+        aria-label="Status filter"
+      >
+        <option value="">Wszystkie</option>
+        <option value="Completed">Completed</option>
+        <option value="Pending">Pending</option>
+        <option value="Planned">Planned</option>
+      </select>
+    </div>
+  </div>
+</div>

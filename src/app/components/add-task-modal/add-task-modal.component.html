@@ -1,0 +1,98 @@
+<div
+  class="modal fade"
+  id="addTaskModal"
+  tabindex="-1"
+  aria-labelledby="addTaskModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-3 shadow">
+      <div class="modal-header">
+        <h4 class="modal-title fw-bold" id="addTaskModalLabel">
+          Dodaj nowe zadanie
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <form #taskForm="ngForm" (ngSubmit)="onSubmit(taskForm)">
+          <div class="mb-3">
+            <label for="taskName" class="form-label">Nazwa zadania</label>
+            <input
+              type="text"
+              id="taskName"
+              class="form-control"
+              name="taskName"
+              [(ngModel)]="newTask.name"
+              required
+              autocomplete="off"
+              aria-label="Nazwa zadania"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="taskDate" class="form-label">Data</label>
+            <input
+              type="date"
+              id="taskDate"
+              class="form-control"
+              name="date"
+              [attr.min]="minDate"
+              [(ngModel)]="newTask.date"
+              required
+              aria-label="Data"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="taskStatus" class="form-label">Status</label>
+            <select
+              id="taskStatus"
+              class="form-select"
+              name="status"
+              [(ngModel)]="newTask.status"
+              required
+              aria-label="Status"
+            >
+              <option value="Planned">Planned</option>
+              <option value="Pending">Pending</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="taskDescription" class="form-label">Opis</label>
+            <textarea
+              id="taskDescription"
+              class="form-control"
+              name="description"
+              rows="3"
+              [(ngModel)]="newTask.description"
+            ></textarea>
+          </div>
+
+          <div class="text-end">
+            <button
+              type="button"
+              class="btn btn-secondary me-2"
+              data-bs-dismiss="modal"
+            >
+              Anuluj
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!taskForm.form.valid"
+            >
+              Dodaj
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
